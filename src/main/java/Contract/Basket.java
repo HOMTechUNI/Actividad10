@@ -24,7 +24,7 @@ public class Basket {
         basketSizeNew = basket.size();
         // update the total value
         totalValueOld = totalValue;
-        totalValueNew= totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(qtyToAdd)));
+        totalValueNew = totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(qtyToAdd)));
 
         // Post-condition ensuring that products was added to the cart
         assert basket.containsKey(product) : "Producto no se ha añadido a la canasta";
@@ -37,14 +37,27 @@ public class Basket {
     }
 
     public void remove(Product product) {
-        // Pre- and post-conditions for the remove method
-        //
+        // Pre-conditions
+        BigDecimal totalValueOld, totalValueNew;
+        int basketSizeOld, basketSizeNew;
+        assert product != null : "Product no puede ser nulo";
+        assert product.getPrice().compareTo(BigDecimal.ZERO) >= 0 : "Precio de producto no puede ser negativo";
+        assert basket.containsKey(product) : "Producto no se encuentra en la canasta";
+        totalValueOld = totalValue;
+        basketSizeOld = basket.size();
         // remove the product from the basket
         basket.remove(product);
+        // update the basket size
+        basketSizeNew = basket.size();
         // update the total value
-        totalValue = totalValue.subtract(product.getPrice().multiply(BigDecimal.valueOf(basket.get(product))));
+        totalValueNew = totalValue.subtract(product.getPrice().multiply(BigDecimal.valueOf(basket.get(product))));
         // post-condition ensuring that the product was removed from the cart
-        // total
+        assert !basket.containsKey(product) : "Producto no se ha eliminado de la canasta";
+        assert basketSizeOld > 0 : "Canasta no puede estar vacio";
+        assert basketSizeOld - basketSizeNew == 1 : "Producto no se ha eliminado correctamente de la canasta";
+        assert totalValueNew.compareTo(totalValueOld) == -1 : "Producto no se ha eliminado de la canasta";
+        assert totalValueNew.compareTo(BigDecimal.ZERO) >= 0 : "Total no puede ser negativo";
+
     }
 
     private boolean invariant() {
