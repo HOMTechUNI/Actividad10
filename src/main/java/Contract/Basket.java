@@ -27,11 +27,11 @@ public class Basket {
         totalValueNew= totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(qtyToAdd)));
 
         // Post-condition ensuring that products was added to the cart
+        assert basket.containsKey(product) : "Producto no se ha añadido a la canasta";
         assert basketSizeNew > 0 : "Canasta no puede estar vacio";
-        assert basketSizeNew > basketSizeOld : "Producto no se ha añadido al canasta";
-        assert totalValueNew.compareTo(totalValueOld) == 1 : "Producto no se ha añadido al canasta";
+        assert basketSizeNew - basketSizeOld == 1 : "Producto no se ha añadido correctamente a la canasta";
+        assert totalValueNew.compareTo(totalValueOld) == 1 : "Producto no se ha añadido a la canasta";
         assert totalValueNew.compareTo(BigDecimal.ZERO) >= 0 : "Total no puede ser negativo";
-        // Post-condition ensuring that the total value is correct
 
 
     }
